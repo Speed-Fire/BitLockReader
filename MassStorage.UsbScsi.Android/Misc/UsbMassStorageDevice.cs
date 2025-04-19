@@ -1,12 +1,13 @@
 ﻿using Android.Hardware.Usb;
 using Android.OS;
+using MassStorage.UsbScsi.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidUsbStorageDriver.Helpers
+namespace MassStorage.UsbScsi.Android.Misc
 {
     internal class UsbMassStorageDevice
     {
@@ -92,7 +93,7 @@ namespace AndroidUsbStorageDriver.Helpers
 		}
 	}
 
-	internal class UsbMassStorageInterface
+	internal class UsbMassStorageInterface : IUsbInterface
 	{
 		private readonly UsbInterface _interface;
 		public UsbInterface UnderlyingInterface => _interface;
@@ -108,6 +109,9 @@ namespace AndroidUsbStorageDriver.Helpers
 		public int AlternateSetting => _interface.AlternateSetting;
 
 		public string? Name => _interface.Name;
+
+		int IUsbInterface.InterfaceClass => (int)_interface.InterfaceClass;
+		int IUsbInterface.InterfaceSubclass => (int)_interface.InterfaceSubclass;
 
 		public UsbMassStorageInterface(UsbInterface @interface)
 		{

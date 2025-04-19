@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0-android</TargetFramework>
-    <SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <!--
@@ -12,5 +11,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\MassStorage.Domain\MassStorage.Domain.csproj" />
+    <ProjectReference Include="..\MassStorage.UsbScsi.Interfaces\MassStorage.UsbScsi.Interfaces.csproj" />
   </ItemGroup>
 </Project>

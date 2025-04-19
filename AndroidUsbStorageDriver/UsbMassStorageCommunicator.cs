@@ -1,10 +1,7 @@
-﻿using Android.Content;
-using Android.Hardware.Usb;
-using AndroidUsbStorageDriver.Commands.Wrappers;
+﻿using AndroidUsbStorageDriver.Commands.Wrappers;
 using AndroidUsbStorageDriver.Exceptions;
 using AndroidUsbStorageDriver.Helpers;
-using Java.Lang;
-using Java.Nio;
+using MassStorage.UsbScsi.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,32 +14,20 @@ namespace AndroidUsbStorageDriver
 
 	public class UsbMassStorageCommunicator : IDisposable
 	{
-		private readonly UsbMassStorageDevice _device;
-
-		internal UsbConnectionManager ConnectionManager { get; }
-
+		internal IUsbScsiConnection Connection { get; }
 		private readonly CSW _commandStatus;
 
-		private UsbDeviceConnection? Connection => ConnectionManager.Connection;
-
-		public UsbMassStorageCommunicator(
-			UsbManager manager, 
-			UsbDevice device)
+		public UsbMassStorageCommunicator(IUsbScsiConnection connection)
 		{
-			_device = new(device);
-			ConnectionManager = new(manager, _device);
+			Connection = connection;
 			_commandStatus = new();
 		}
 
-		public bool Open() => ConnectionManager.Open();
+		public bool Open() => Connection.Open();
 
 		public int Send(ControlCommand command, int timeout = 1000)
 		{
-			if (Connection is null)
-				throw new InvalidOperationException("Protocol is closed!");
-			
-			return Connection.ControlTransfer(
-				(UsbAddressing)command.RequestType,
+			return Connection.ControlTransfer(command.RequestType,
 				command.Request,
 				command.Value,
 				command.Index,
@@ -54,10 +39,7 @@ namespace AndroidUsbStorageDriver
 
 		private int Send(byte[] buffer, int offset, int length, int timeout)
 		{
-			if (Connection is null)
-				throw new InvalidOperationException("Protocol is closed!");
-
-			return Connection.BulkTransfer(ConnectionManager.BulkOut!, buffer, offset, length, timeout);
+			return Connection.BulkTransferOut(buffer, offset, length, timeout);
 		}
 
 		private int Send(CBW command, int timeout)
@@ -67,10 +49,7 @@ namespace AndroidUsbStorageDriver
 
 		private int Receive(byte[] data, int offset, int length, int timeout)
 		{
-			if (Connection is null)
-				throw new InvalidOperationException("Protocol is closed!");
-			
-			return Connection.BulkTransfer(ConnectionManager.BulkIn!, data, offset, length, timeout);
+			return Connection.BulkTransferIn(data, offset, length, timeout);
 		}
 
 		private int ReceiveCsw(int timeout)
@@ -122,7 +101,7 @@ namespace AndroidUsbStorageDriver
 
 		public void Dispose()
 		{
-			ConnectionManager.Dispose();
+			Connection.Dispose();
 		}
 	}
 }

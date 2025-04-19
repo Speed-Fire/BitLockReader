@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net8.0-android</TargetFramework>
+	  <SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <IsTrimmable>true</IsTrimmable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MassStorage.UsbScsi.Interfaces\MassStorage.UsbScsi.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

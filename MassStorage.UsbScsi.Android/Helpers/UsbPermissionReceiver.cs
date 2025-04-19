@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidUsbStorageDriver.Helpers
+namespace MassStorage.UsbScsi.Android.Helpers
 {
 	[BroadcastReceiver(Exported = true, Enabled = true)]
 	[IntentFilter([UsbBroadcastHelper.UsbPermissionAction])]

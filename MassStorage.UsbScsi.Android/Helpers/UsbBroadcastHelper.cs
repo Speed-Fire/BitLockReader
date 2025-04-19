@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidUsbStorageDriver.Helpers
+namespace MassStorage.UsbScsi.Android.Helpers
 {
     public class UsbBroadcastHelper
     {

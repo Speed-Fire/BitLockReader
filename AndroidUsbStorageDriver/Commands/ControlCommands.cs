@@ -1,7 +1,4 @@
-﻿using Android.Hardware.Usb;
-using Android.Health.Connect.DataTypes.Units;
-using Android.Nfc;
-using AndroidUsbStorageDriver.Commands.Wrappers;
+﻿using AndroidUsbStorageDriver.Commands.Wrappers;
 using AndroidUsbStorageDriver.Helpers;
 using System;
 using System.Collections.Generic;

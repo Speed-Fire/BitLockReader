@@ -1,9 +1,11 @@
 ﻿using Android.Hardware.Usb;
-using AndroidUsbStorageDriver.Helpers;
+using MassStorage.UsbScsi.Android.Helpers;
+using MassStorage.UsbScsi.Android.Misc;
+using MassStorage.UsbScsi.Interfaces;
 
-namespace AndroidUsbStorageDriver
+namespace MassStorage.UsbScsi.Android
 {
-	internal class UsbConnectionManager : IDisposable
+	internal class AndroidUsbScsiConnectionManager : IUsbScsiConnectionManager
 	{
 		private readonly UsbManager _manager;
 		private UsbMassStorageDevice _device;
@@ -22,13 +24,15 @@ namespace AndroidUsbStorageDriver
 		public UsbMassStorageEndpoint? BulkIn => _bulkIn;
 		public UsbMassStorageEndpoint? BulkOut => _bulkOut;
 
+		IUsbInterface? IUsbScsiConnectionManager.Interface => _interface;
+
 		private IList<UsbMassStorageEndpoint>? _inEndpoints;
 		private IList<UsbMassStorageEndpoint>? _outEndpoints;
 
-		public UsbConnectionManager(UsbManager manager, UsbMassStorageDevice device)
+		public AndroidUsbScsiConnectionManager(UsbManager manager, UsbDevice device)
 		{
 			_manager = manager;
-			_device = device;
+			_device = new(device);
 		}
 
 		public bool IsDeviceVisible()

@@ -33,7 +33,7 @@ namespace AndroidUsbStorageDriver
 
 		public int Reset()
 		{
-			var @interface = _communicator.ConnectionManager.Interface;
+			var @interface = _communicator.Connection.ConnectionManager.Interface;
 			if (@interface is null)
 				throw new Exception("Not initialized.");
 
@@ -50,7 +50,7 @@ namespace AndroidUsbStorageDriver
 
 		public int GetLogicalUnitCount()
 		{
-			var @interface = _communicator.ConnectionManager.Interface;
+			var @interface = _communicator.Connection.ConnectionManager.Interface;
 			if (@interface is null)
 				throw new Exception("Not initialized.");
 
@@ -144,13 +144,13 @@ namespace AndroidUsbStorageDriver
 
 		private void Reconnect()
 		{
-			if (!_communicator.ConnectionManager.IsDeviceVisible())
+			if (!_communicator.Connection.ConnectionManager.IsDeviceVisible())
 			{
 				_mutex.ReleaseMutex();
 				throw new Exception("Device is disconnected.");
 			}
 
-			if (!_communicator.ConnectionManager.Open())
+			if (!_communicator.Connection.Open())
 			{
 				_mutex.ReleaseMutex();
 				throw new Exception("Failed to reconnect."); 

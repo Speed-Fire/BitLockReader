@@ -1,12 +1,13 @@
 ﻿using Android.Content;
 using Android.Hardware.Usb;
+using MassStorage.UsbScsi.Android.Misc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidUsbStorageDriver.Helpers
+namespace MassStorage.UsbScsi.Android.Helpers
 {
     internal static class UsbDeviceHelper
     {

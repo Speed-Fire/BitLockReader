@@ -1,5 +1,4 @@
-﻿using Android.Nfc;
-using AndroidUsbStorageDriver.Commands.Wrappers;
+﻿using AndroidUsbStorageDriver.Commands.Wrappers;
 using AndroidUsbStorageDriver.Enums;
 using AndroidUsbStorageDriver.Helpers;
 using System;
