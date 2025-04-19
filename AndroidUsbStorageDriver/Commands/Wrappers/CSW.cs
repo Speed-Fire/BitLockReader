@@ -1,6 +1,6 @@
 ﻿using AndroidUsbStorageDriver.Helpers;
 
-namespace AndroidUsbStorageDriver.Commands
+namespace AndroidUsbStorageDriver.Commands.Wrappers
 {
 	public enum CommandStatus
 	{

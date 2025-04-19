@@ -1,4 +1,6 @@
 ﻿using AndroidUsbStorageDriver.Commands;
+using AndroidUsbStorageDriver.Commands.Wrappers;
+using AndroidUsbStorageDriver.Enums;
 using AndroidUsbStorageDriver.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -10,27 +12,23 @@ using System.Threading.Tasks;
 
 namespace AndroidUsbStorageDriver
 {
-    public class UsbMassStorageProtocol
+    public class UsbMassStorageProtocol : IDisposable
     {
         private readonly UsbMassStorageCommunicator _communicator;
+		private readonly Mutex _mutex;
 
-		private readonly byte[] _commandResultBuffer = new byte[256];
-
-		private CapacityInfo _capacityInfo;
+		private readonly CBW _command;
 
 		public UsbMassStorageProtocol(UsbMassStorageCommunicator communicator)
 		{
 			_communicator = communicator;
+			_mutex = new();
+			_command = new();
 		}
 
 		public bool Init()
 		{
-			if (!_communicator.Open())
-				return false;
-
-			_capacityInfo = ReadCapacityInfo();
-
-			return true;
+			return _communicator.Open();
 		}
 
 		public int Reset()
@@ -43,21 +41,88 @@ namespace AndroidUsbStorageDriver
 			return _communicator.Send(resetCommand);
 		}
 
-		private CapacityInfo ReadCapacityInfo()
+		public void HardReset()
 		{
-			var command = new ReadCapacity10Command();
-			var output = new byte[8];
+			Reset();
 
-			var res = Execute(command, output, 0, output.Length);
-
-			return new(output);
+			_communicator.ClearInEndpoint(100);
 		}
 
-		public CommandStatus Execute(CBW command, byte[] buffer, int offset, int length)
+		public int GetLogicalUnitCount()
 		{
+			var @interface = _communicator.ConnectionManager.Interface;
+			if (@interface is null)
+				throw new Exception("Not initialized.");
+
+			var command = new GetMaxLunCommand(@interface.Id);
+			_communicator.Send(command);
+
+			return command.LogicalUnitCount;
+		}
+
+		public CommandStatus ModeSense(int logicalUnitNumber, ModeSensePage page, int requestedLength,
+			out byte[] buffer)
+		{
+			_command.SetModeSense(logicalUnitNumber, page, requestedLength);
+
+			buffer = new byte[requestedLength];
+
+			var res = Execute(_command, buffer, 0, buffer.Length, out _, false);
+
+			return res;
+		}
+
+		public CommandStatus ReadCapacityInfo(int logicalUnitNumber, out CapacityInfo info)
+		{
+			_command.SetReadCapacity(logicalUnitNumber);
+			var output = new byte[8];
+
+			var res = Execute(_command, output, 0, output.Length, out _,false);
+
+			info = new(output);
+			return res;
+		}
+
+		public CommandStatus RequestSense(int logicalUnitNumber, byte[] buffer, int offset)
+		{
+			_command.SetRequestSense(logicalUnitNumber);
+
+			return Execute(_command, buffer, offset, 18, out _, false);
+		}
+
+		public CommandStatus Read(int logicalUnitNumber, int logicalBlockAddress, int logicalBlockSize,
+			byte[] buffer, int offset, int length, out int residue)
+		{
+			_command.SetRead10(logicalUnitNumber, logicalBlockAddress,
+				length, logicalBlockSize);
+
+			return Execute(_command, buffer, offset, length, out residue, false);
+		}
+
+		public CommandStatus Write(int logicalUnitNumber, int logicalBlockAddress, int logicalBlockSize,
+			byte[] buffer, int offset, int length, out int residue)
+		{
+			_command.SetWrite10(logicalUnitNumber, logicalBlockAddress,
+				length, logicalBlockSize);
+
+			return Execute(_command, buffer, offset, length, out residue, true);
+		}
+
+		private CommandStatus Execute(CBW command, byte[] buffer, int offset, int length, out int residue,
+			bool isWrite)
+		{
+			residue = 0;
+
 			try
 			{
-				return _communicator.Execute(command, buffer, offset, length);
+				_mutex.WaitOne();
+
+				var res = _communicator.Execute(command, buffer, offset, length, out residue,
+					isWrite);
+
+				_mutex.ReleaseMutex();
+
+				return res;
 			}
 			catch (CommandNotSentException)
 			{
@@ -69,15 +134,35 @@ namespace AndroidUsbStorageDriver
 				Reconnect();
 				return CommandStatus.Failed;
 			}
+			catch (Exception)
+			{
+				_mutex.ReleaseMutex();
+
+				throw;
+			}
 		}
 
 		private void Reconnect()
 		{
 			if (!_communicator.ConnectionManager.IsDeviceVisible())
+			{
+				_mutex.ReleaseMutex();
 				throw new Exception("Device is disconnected.");
+			}
 
 			if (!_communicator.ConnectionManager.Open())
-				throw new Exception("Failed to reconnect.");
+			{
+				_mutex.ReleaseMutex();
+				throw new Exception("Failed to reconnect."); 
+			}
+
+			HardReset();
+		}
+
+		public void Dispose()
+		{
+			_communicator.Dispose();
+			_mutex.Dispose();
 		}
 	}
 }

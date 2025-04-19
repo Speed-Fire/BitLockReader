@@ -10,4 +10,7 @@
     -->
     <IsTrimmable>true</IsTrimmable>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MassStorage.Domain\MassStorage.Domain.csproj" />
+  </ItemGroup>
 </Project>

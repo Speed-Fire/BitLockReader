@@ -1,6 +1,6 @@
 ﻿using AndroidUsbStorageDriver.Helpers;
 
-namespace AndroidUsbStorageDriver.Commands
+namespace AndroidUsbStorageDriver.Commands.Wrappers
 {
 	public class CBW
 	{
@@ -19,31 +19,31 @@ namespace AndroidUsbStorageDriver.Commands
 			set => ByteHelper.WriteLittleEndian(Buffer, TAG_OFFSET, value);
 		}
 
-		protected int TransferDataLength
+		internal int TransferDataLength
 		{
 			get => ByteHelper.ReadLittleEndian(Buffer, TRANSFER_DATA_LENGTH_OFFSET);
 			set => ByteHelper.WriteLittleEndian(Buffer, TRANSFER_DATA_LENGTH_OFFSET, value);
 		}
 
-		protected bool IsInput
+		internal bool IsInput
 		{
 			get => Buffer[DIRECTION_OFFSET] == 0x80;
 			set => Buffer[DIRECTION_OFFSET] = (byte)(value ? 0x80 : 0);
 		}
 
-		protected byte LUN
+		internal byte LUN
 		{
 			get => Buffer[LNU_OFFSET];
 			set => Buffer[LNU_OFFSET] = value;
 		}
 
-		protected byte CommandLength
+		internal byte CommandLength
 		{
 			get => Buffer[COMMAND_LENGTH_OFFSET];
 			set => Buffer[COMMAND_LENGTH_OFFSET] = value;
 		}
 
-		protected byte this[int id]
+		internal byte this[int id]
 		{
 			get => Buffer[COMMAND_OFFSET + id];
 			set => Buffer[COMMAND_OFFSET + id] = value;
@@ -55,6 +55,14 @@ namespace AndroidUsbStorageDriver.Commands
 			Buffer[1] = 0x53;
 			Buffer[2] = 0x42;
 			Buffer[3] = 0x43;
+		}
+
+		public void ClearCommandData()
+		{
+			for(int i = COMMAND_OFFSET; i < Buffer.Length; i++)
+			{
+				Buffer[i] = 0;
+			}
 		}
 	}
 }

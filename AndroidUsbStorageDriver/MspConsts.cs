@@ -15,6 +15,7 @@ namespace AndroidUsbStorageDriver
         public const int REQUEST_REQUEST_SENSE = 0x03;
         public const int REQUEST_READ_10 = 0x28;
         public const int REQUEST_WRITE_10 = 0x2A;
+        public const int REQUEST_MODE_SENSE_10 = 0x5A;
 
         public const int VALUE_DEVICE_DESCRIPTOR = 0x0100;
 

@@ -48,7 +48,7 @@ namespace AndroidUsbStorageDriver.Helpers
 				bytes[3] = buffer[offset];
 			}
 
-            return BitConverter.ToInt32(buffer, 0);
+            return BitConverter.ToInt32(bytes, 0);
         }
 
 		public static int ReadBigEndian(byte[] buffer, int offset)
@@ -70,7 +70,7 @@ namespace AndroidUsbStorageDriver.Helpers
 				bytes[3] = buffer[offset];
 			}
 
-			return BitConverter.ToInt32(buffer, 0);
+			return BitConverter.ToInt32(bytes, 0);
 		}
 	}
 }

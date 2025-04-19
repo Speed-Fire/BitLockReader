@@ -39,6 +39,10 @@ namespace AndroidUsbStorageDriver
 		public bool Open()
 		{
 			Connection?.Close();
+			_interface = null;
+			_currentInterfaceId = -1;
+			_currentInEndpointId = -1;
+			_currentOutEndpointId = -1;
 
 			Connection = _manager.OpenDevice(_device, 5);
 			if (Connection == null)

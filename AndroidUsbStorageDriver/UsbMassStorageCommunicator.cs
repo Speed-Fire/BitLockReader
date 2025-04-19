@@ -1,8 +1,9 @@
 ﻿using Android.Content;
 using Android.Hardware.Usb;
-using AndroidUsbStorageDriver.Commands;
+using AndroidUsbStorageDriver.Commands.Wrappers;
 using AndroidUsbStorageDriver.Exceptions;
 using AndroidUsbStorageDriver.Helpers;
+using Java.Lang;
 using Java.Nio;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,7 @@ namespace AndroidUsbStorageDriver
 		{
 			if (Connection is null)
 				throw new InvalidOperationException("Protocol is closed!");
-
+			
 			return Connection.ControlTransfer(
 				(UsbAddressing)command.RequestType,
 				command.Request,
@@ -77,79 +78,25 @@ namespace AndroidUsbStorageDriver
 			return Receive(_commandStatus.Buffer, 0, _commandStatus.Buffer.Length, timeout);
 		}
 
-		public CommandStatus Execute(CBW command, byte[] buffer, int offset, int length, int sendTimeout = 200, int readTimeout = 200)
+		public CommandStatus Execute(CBW command,
+			byte[] buffer, int offset, int length, out int residue, bool isWrite,
+			int sendTimeout = 200, int readTimeout = 200)
 		{
+			residue = 0;
+
 			var sendRes = Send(command, sendTimeout);
 			if (sendRes < command.Buffer.Length)
 				throw new CommandNotSentException();
 
-			var readed = 0;
+			var transferred = 0;
 			if (buffer != null && length > 0)
-				readed = Receive(buffer, offset, length, readTimeout);
-
-			var cswResult = ReceiveCsw(readTimeout);
-			HandleCsw(command, cswResult);
-
-			return _commandStatus.Status;
-		}
-
-		public CommandStatus Read(CBW command, byte[] buffer, int offset, int length,
-			out int residue,
-			int sendTimeout = 200, int readTimeout = 200)
-		{
-			residue = 0;
-			var maxTransferLength = ConnectionManager.BulkIn!.MaxPacketSize;
-
-			var sendRes = Send(command, sendTimeout);
-			if (sendRes < command.Buffer.Length)
-				throw new CommandNotSentException();
-
-			// separate reading to several steps, if required length exceeds maximal transport length
-			var shift = 0;
-			for (var len = length; len > 0; len -= maxTransferLength)
 			{
-				var toread = Math.Min(len, maxTransferLength);
-				var readed = Receive(buffer, offset + shift, toread, readTimeout);
-
-				if (readed < 0)
-					break;
-
-				shift += readed;
+				if(isWrite)
+					transferred = Send(buffer, offset, length, sendTimeout);
+				else
+					transferred = Receive(buffer, offset, length, readTimeout);
 			}
 
-			// handle CSW
-			var cswResult = ReceiveCsw(readTimeout);
-			HandleCsw(command, cswResult);
-
-			residue = _commandStatus.Residue;
-			return _commandStatus.Status;
-		}
-
-		public CommandStatus Write(CBW command, byte[] buffer, int offset, int length,
-			out int residue,
-			int sendTimeout = 200, int readTimeout = 200)
-		{
-			residue = 0;
-			var maxTransferLength = ConnectionManager.BulkOut!.MaxPacketSize;
-
-			var sendRes = Send(command, sendTimeout);
-			if (sendRes < command.Buffer.Length)
-				throw new CommandNotSentException();
-
-			// separate reading to several steps, if required length exceeds maximal transport length
-			var shift = 0;
-			for (var len = length; len > 0; len -= maxTransferLength)
-			{
-				var tosend = Math.Min(len, maxTransferLength);
-				var sended = Send(buffer, offset + shift, tosend, readTimeout);
-
-				if (sended < 0)
-					break;
-
-				shift += sended;
-			}
-
-			// handle CSW
 			var cswResult = ReceiveCsw(readTimeout);
 			HandleCsw(command, cswResult);
 
@@ -164,6 +111,13 @@ namespace AndroidUsbStorageDriver
 
 			if (command.Tag != _commandStatus.Tag)
 				throw new CswWrongTagException();
+		}
+
+		public void ClearInEndpoint(int timeout)
+		{
+			var tmp = new byte[256];
+
+			Receive(tmp, 0, tmp.Length, timeout);
 		}
 
 		public void Dispose()
