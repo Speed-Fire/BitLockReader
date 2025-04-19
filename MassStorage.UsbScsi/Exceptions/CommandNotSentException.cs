@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidUsbStorageDriver.Exceptions
+namespace MassStorage.UsbScsi.Exceptions
 {
     public class CommandNotSentException : Exception
     {

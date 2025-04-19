@@ -1,8 +1,8 @@
-﻿using AndroidUsbStorageDriver.Commands.Wrappers;
+﻿using MassStorage.UsbScsi.Commands.Wrappers;
 using MassStorage.Domain.Exceptions;
 using MassStorage.Domain.Interfaces;
 
-namespace AndroidUsbStorageDriver
+namespace MassStorage.UsbScsi
 {
 	public class LogicalUnit : ILogicalUnit
 	{

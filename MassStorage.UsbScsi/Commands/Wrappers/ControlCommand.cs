@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidUsbStorageDriver.Commands.Wrappers
+namespace MassStorage.UsbScsi.Commands.Wrappers
 {
     public class ControlCommand
     {

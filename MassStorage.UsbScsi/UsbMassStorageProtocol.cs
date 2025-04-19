@@ -1,7 +1,7 @@
-﻿using AndroidUsbStorageDriver.Commands;
-using AndroidUsbStorageDriver.Commands.Wrappers;
-using AndroidUsbStorageDriver.Enums;
-using AndroidUsbStorageDriver.Exceptions;
+﻿using MassStorage.UsbScsi.Commands;
+using MassStorage.UsbScsi.Commands.Wrappers;
+using MassStorage.UsbScsi.Enums;
+using MassStorage.UsbScsi.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 #nullable disable
 
-namespace AndroidUsbStorageDriver
+namespace MassStorage.UsbScsi
 {
     public class UsbMassStorageProtocol : IDisposable
     {

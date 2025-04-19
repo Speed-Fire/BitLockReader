@@ -1,6 +1,6 @@
-﻿using AndroidUsbStorageDriver.Helpers;
+﻿using MassStorage.UsbScsi.Helpers;
 
-namespace AndroidUsbStorageDriver.Commands.Wrappers
+namespace MassStorage.UsbScsi.Commands.Wrappers
 {
 	public class CBW
 	{

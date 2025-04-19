@@ -5,7 +5,7 @@ VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitLockReader", "BitLockReader\BitLockReader.csproj", "{A2AF72F2-65A2-4DDF-B555-0EAFC7AE3E76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidUsbStorageDriver", "AndroidUsbStorageDriver\AndroidUsbStorageDriver.csproj", "{9D5C9BDF-8A93-424C-ADBC-2DB285631029}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassStorage.UsbScsi", "MassStorage.UsbScsi\MassStorage.UsbScsi.csproj", "{9D5C9BDF-8A93-424C-ADBC-2DB285631029}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassStorage.Domain", "MassStorage.Domain\MassStorage.Domain.csproj", "{1022B247-4FA1-4CF2-9408-5A61BCAD3F84}"
 EndProject

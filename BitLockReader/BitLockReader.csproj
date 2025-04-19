@@ -62,7 +62,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\AndroidUsbStorageDriver\AndroidUsbStorageDriver.csproj" />
+	  <ProjectReference Include="..\MassStorage.UsbScsi\MassStorage.UsbScsi.csproj" />
+	  <ProjectReference Include="..\MassStorage.UsbScsi.Android\MassStorage.UsbScsi.Android.csproj" />
 	</ItemGroup>
 
 </Project>

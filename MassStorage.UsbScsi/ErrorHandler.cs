@@ -1,4 +1,4 @@
-﻿using AndroidUsbStorageDriver.Commands.Wrappers;
+﻿using MassStorage.UsbScsi.Commands.Wrappers;
 using MassStorage.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidUsbStorageDriver
+namespace MassStorage.UsbScsi
 {
     internal class ErrorHandler
     {

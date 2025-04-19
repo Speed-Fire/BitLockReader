@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidUsbStorageDriver.Helpers
+namespace MassStorage.UsbScsi.Helpers
 {
     /// <summary>
     /// Helps to get correct number of Logical Unit.

@@ -1,11 +1,11 @@
-﻿using AndroidUsbStorageDriver.Enums;
+﻿using MassStorage.UsbScsi.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidUsbStorageDriver.Commands.Wrappers
+namespace MassStorage.UsbScsi.Commands.Wrappers
 {
     internal class SenseErrorInfo
     {

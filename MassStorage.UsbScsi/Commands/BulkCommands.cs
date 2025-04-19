@@ -1,13 +1,13 @@
-﻿using AndroidUsbStorageDriver.Commands.Wrappers;
-using AndroidUsbStorageDriver.Enums;
-using AndroidUsbStorageDriver.Helpers;
+﻿using MassStorage.UsbScsi.Commands.Wrappers;
+using MassStorage.UsbScsi.Enums;
+using MassStorage.UsbScsi.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidUsbStorageDriver.Commands
+namespace MassStorage.UsbScsi.Commands
 {
     internal static class BulkCommands
     {

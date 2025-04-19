@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidUsbStorageDriver.Enums
+namespace MassStorage.UsbScsi.Enums
 {
     internal enum ResponseCode
     {

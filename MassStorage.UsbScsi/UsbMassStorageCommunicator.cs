@@ -1,6 +1,6 @@
-﻿using AndroidUsbStorageDriver.Commands.Wrappers;
-using AndroidUsbStorageDriver.Exceptions;
-using AndroidUsbStorageDriver.Helpers;
+﻿using MassStorage.UsbScsi.Commands.Wrappers;
+using MassStorage.UsbScsi.Exceptions;
+using MassStorage.UsbScsi.Helpers;
 using MassStorage.UsbScsi.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidUsbStorageDriver
+namespace MassStorage.UsbScsi
 {
 
 	public class UsbMassStorageCommunicator : IDisposable
