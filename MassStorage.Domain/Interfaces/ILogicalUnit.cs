@@ -8,12 +8,12 @@ namespace MassStorage.Domain.Interfaces
 {
 	public interface ILogicalUnit
 	{
-		int BlockSize { get; }
-		uint Capacity { get; }
+		uint BlockSize { get; }
+		ulong Capacity { get; }
 		int LogicalUnitNumber { get; }
 
-		void Read(int address, byte[] buffer, int offset, int length);
-		void Write(int address, byte[] buffer, int offset, int length);
+		void Read(ulong address, byte[] buffer, int offset, int length);
+		void Write(ulong address, byte[] buffer, int offset, int length);
 		void Reset();
 	}
 }

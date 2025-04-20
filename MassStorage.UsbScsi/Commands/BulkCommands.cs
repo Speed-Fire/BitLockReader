@@ -86,8 +86,8 @@ namespace MassStorage.UsbScsi.Commands
 			cbw[8] = (byte)((requestedLength & 0x000000FF) >> 0);
 		}
 
-		public static void SetRead10(this CBW cbw, int logicalUnitNumber, int logicalBlockAddress,
-			int dataLength, int blockSize)
+		public static void SetRead10(this CBW cbw, int logicalUnitNumber, ulong logicalBlockAddress,
+			int dataLength, uint blockSize)
         {
 			cbw.ClearCommandData();
 
@@ -110,8 +110,8 @@ namespace MassStorage.UsbScsi.Commands
 			cbw[8] = (byte)((blockCount & 0x00FF) >> 0);
 		}
 
-		internal static void SetWrite10(this CBW cbw, int logicalUnitNumber, int logicalBlockAddress,
-			int dataLength, int blockSize)
+		internal static void SetWrite10(this CBW cbw, int logicalUnitNumber, ulong logicalBlockAddress,
+			int dataLength, uint blockSize)
 		{
 			cbw.ClearCommandData();
 

@@ -13,8 +13,8 @@ namespace MassStorage.UsbScsi
 		private readonly CapacityInfo _capacityInfo;
 
 		public int LogicalUnitNumber => _logicalUnitNumber;
-		public uint Capacity => _capacityInfo.Capacity;
-		public int BlockSize => _capacityInfo.BlockSize;
+		public ulong Capacity => _capacityInfo.Capacity;
+		public uint BlockSize => _capacityInfo.BlockSize;
 
 		internal LogicalUnit(UsbMassStorageProtocol protocol, ErrorHandler errorHandler,
 			int logicalUnitNumber, CapacityInfo capacityInfo)
@@ -30,7 +30,7 @@ namespace MassStorage.UsbScsi
 			_protocol.HardReset();
 		}
 
-		public void Read(int address, byte[] buffer, int offset, int length)
+		public void Read(ulong address, byte[] buffer, int offset, int length)
 		{
 			var res = _protocol.Read(_logicalUnitNumber, address, BlockSize,
 				buffer, offset, length, out var residue);
@@ -38,9 +38,9 @@ namespace MassStorage.UsbScsi
 			_errorHandler.ThrowIfError(LogicalUnitNumber, res);
 		}
 
-		public void Write(int address, byte[] buffer, int offset, int length)
+		public void Write(ulong address, byte[] buffer, int offset, int length)
 		{
-			if (address + length > Capacity)
+			if (address + ((ulong)length / BlockSize) > Capacity)
 				throw new InvalidOperationException("There is no room for your data.");
 
 			var res = _protocol.Write(_logicalUnitNumber, address, BlockSize,

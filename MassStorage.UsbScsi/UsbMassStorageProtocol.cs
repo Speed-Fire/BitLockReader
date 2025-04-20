@@ -90,7 +90,7 @@ namespace MassStorage.UsbScsi
 			return Execute(_command, buffer, offset, 18, out _, false);
 		}
 
-		public CommandStatus Read(int logicalUnitNumber, int logicalBlockAddress, int logicalBlockSize,
+		public CommandStatus Read(int logicalUnitNumber, ulong logicalBlockAddress, uint logicalBlockSize,
 			byte[] buffer, int offset, int length, out int residue)
 		{
 			_command.SetRead10(logicalUnitNumber, logicalBlockAddress,
@@ -99,7 +99,7 @@ namespace MassStorage.UsbScsi
 			return Execute(_command, buffer, offset, length, out residue, false);
 		}
 
-		public CommandStatus Write(int logicalUnitNumber, int logicalBlockAddress, int logicalBlockSize,
+		public CommandStatus Write(int logicalUnitNumber, ulong logicalBlockAddress, uint logicalBlockSize,
 			byte[] buffer, int offset, int length, out int residue)
 		{
 			_command.SetWrite10(logicalUnitNumber, logicalBlockAddress,

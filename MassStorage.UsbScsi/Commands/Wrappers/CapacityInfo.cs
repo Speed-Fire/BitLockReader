@@ -11,11 +11,11 @@ namespace MassStorage.UsbScsi.Commands.Wrappers
     {
         private readonly byte[] _buffer;
 
-		public uint LastBlockAddress => (uint)ByteHelper.ReadBigEndian(_buffer, 0);
+		public ulong LastBlockAddress => ByteHelper.ReadBigEndian(_buffer, 0);
 
-		public int BlockSize => ByteHelper.ReadBigEndian(_buffer, 4);
+		public uint BlockSize => ByteHelper.ReadBigEndian(_buffer, 4);
 
-		public uint Capacity => LastBlockAddress - 1 + (uint)BlockSize;
+		public ulong Capacity => LastBlockAddress + 1;
 
 		public CapacityInfo(byte[] buffer)
 		{

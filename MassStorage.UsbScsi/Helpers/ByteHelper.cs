@@ -51,7 +51,7 @@ namespace MassStorage.UsbScsi.Helpers
             return BitConverter.ToInt32(bytes, 0);
         }
 
-		public static int ReadBigEndian(byte[] buffer, int offset)
+		public static uint ReadBigEndian(byte[] buffer, int offset)
 		{
 			var bytes = new byte[4];
 			
@@ -70,7 +70,7 @@ namespace MassStorage.UsbScsi.Helpers
 				bytes[3] = buffer[offset];
 			}
 
-			return BitConverter.ToInt32(bytes, 0);
+			return BitConverter.ToUInt32(bytes, 0);
 		}
 	}
 }
